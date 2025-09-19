@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Register</title>
+        <link rel="stylesheet" href="/static/login.css" />
+    </head>
+    <body>
+        <form id="login-window">
+            <div class="login-title">Criar conta</div>
+            <input id="usuario" placeholder="Usuário">
+            <input id="senha" type="password" placeholder="Senha">
+            <button>Criar conta</button>     
+        </form> 
+    </body>
+</html>
+<script>
+    const form = document.getElementById('login-window');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const nome = document.getElementById('usuario').value;
+        const senha = document.getElementById('senha').value;
+
+        const response = await fetch('/usuario/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nome, senha })
+        });
+
+        console.log(response)
+
+        if (response.ok) {
+            console.log('Usuário registrado com sucesso!');
+            form.reset();
+        } else {
+            const erro = await response.json();
+            console.log(`Erro: ${erro.detail || 'Desconhecido'}`);
+        }
+    });
+</script>

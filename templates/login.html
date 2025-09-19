@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Log-In</title>
+        <link rel="stylesheet" href="/static/login.css" />
+    </head>
+    <body>
+        <form id="login-window">
+            <div class="login-title">Entre em sua conta</div>
+            <input id="usuario" placeholder="Usuário">
+            <input id="senha" type="password" placeholder="Senha">
+            <button>Login</button>
+            <a class="link">Esqueceu a senha?</a>
+            <div id="small-text">Não possui uma conta ainda? <a href="/register" class="link">Crie uma conta.</a></div>      
+        </form> 
+    </body>
+</html>
+
+<script>
+    const form = document.getElementById('login-window');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const nome = document.getElementById('usuario').value;
+        const senha = document.getElementById('senha').value;
+
+        const response = await fetch('/login/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nome: nome, senha: senha })
+        });
+
+        console.log(response)
+
+        if (response.ok) {
+            console.log('Logado');
+            form.reset();
+        } else {
+            const erro = await response.json();
+            console.log(`Erro: ${erro.detail || 'Desconhecido'}`);
+        }
+    });
+</script>
